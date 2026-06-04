@@ -19,8 +19,12 @@ FROM node:22-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 
+# Arg to bust build cache when needed. Update the value when you want a fresh install layer.
+ARG CACHEBUST=2026-06-04-12-30
+
 COPY package.json pnpm-lock.yaml ./
-RUN npm install -g pnpm && pnpm install --prod --no-frozen-lockfile
+# Use the CACHEBUST arg to ensure this layer is re-run when we push an updated Dockerfile
+RUN echo "CACHEBUST=$CACHEBUST" && npm install -g pnpm && pnpm install --prod --no-frozen-lockfile
 
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
