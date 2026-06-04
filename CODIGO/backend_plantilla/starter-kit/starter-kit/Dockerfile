@@ -5,14 +5,14 @@
 
 FROM node:22-alpine AS deps
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
+COPY CODIGO/backend_plantilla/starter-kit/starter-kit/package.json CODIGO/backend_plantilla/starter-kit/starter-kit/pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install --no-frozen-lockfile
 
 FROM node:22-alpine AS builder
 WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
+COPY CODIGO/backend_plantilla/starter-kit/starter-kit/package.json CODIGO/backend_plantilla/starter-kit/starter-kit/pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install --no-frozen-lockfile
-COPY . .
+COPY CODIGO/backend_plantilla/starter-kit/starter-kit/ .
 RUN pnpm run build
 
 FROM node:22-alpine AS runtime
@@ -22,7 +22,7 @@ ENV NODE_ENV=production
 # Arg to bust build cache when needed. Update the value when you want a fresh install layer.
 ARG CACHEBUST=2026-06-04-12-30
 
-COPY package.json pnpm-lock.yaml ./
+COPY CODIGO/backend_plantilla/starter-kit/starter-kit/package.json CODIGO/backend_plantilla/starter-kit/starter-kit/pnpm-lock.yaml ./
 # Use the CACHEBUST arg to ensure this layer is re-run when we push an updated Dockerfile
 RUN echo "CACHEBUST=$CACHEBUST" && npm install -g pnpm && pnpm install --prod --no-frozen-lockfile
 
