@@ -31,6 +31,7 @@ class Settings(BaseSettings):
     
     # CORS - Requiere ALLOWED_ORIGINS de entorno para producción
     ALLOWED_ORIGINS: str = os.getenv("ALLOWED_ORIGINS", "")
+    RAILWAY_DOMAIN: str = os.getenv("RAILWAY_DOMAIN", "")
     
     @property
     def allowed_origins_list(self) -> list:
@@ -43,12 +44,16 @@ class Settings(BaseSettings):
                     "http://localhost:3001", 
                     "http://127.0.0.1:3000"
                 ]
-            else:
-                # En producción, CORS es requerido
-                raise ValueError(
-                    "ALLOWED_ORIGINS environment variable is required for production. "
-                    "Set it to your frontend domain (e.g., https://yourdomain.com)"
-                )
+            # En producción, usar RAILWAY_DOMAIN si está presente
+            if self.RAILWAY_DOMAIN:
+                return [
+                    f"https://{self.RAILWAY_DOMAIN}",
+                    f"https://www.{self.RAILWAY_DOMAIN}"
+                ]
+            raise ValueError(
+                "ALLOWED_ORIGINS environment variable is required for production. "
+                "Set it to your frontend domain (e.g., https://yourdomain.com)"
+            )
         return [origin.strip() for origin in self.ALLOWED_ORIGINS.split(",") if origin.strip()]
 
     model_config = SettingsConfigDict(
