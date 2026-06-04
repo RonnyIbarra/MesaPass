@@ -1,5 +1,6 @@
 # Dockerfile para Next.js Frontend
 # Optimizado para Railway
+# Updated: No frozen lockfile to match pnpm overrides config
 
 FROM node:22-alpine AS dependencies
 WORKDIR /app
