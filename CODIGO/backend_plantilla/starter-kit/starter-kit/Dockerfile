@@ -1,8 +1,9 @@
 # Dockerfile para Next.js Frontend
 # Optimizado para Railway
-# Updated: No frozen lockfile to match pnpm overrides config
+# Build cache buster: 2026-06-04-12-30 - Force rebuild without frozen lockfile
+# Etapas: deps -> builder -> runtime
 
-FROM node:22-alpine AS dependencies
+FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install --no-frozen-lockfile
