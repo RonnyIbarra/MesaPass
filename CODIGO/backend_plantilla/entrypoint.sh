@@ -8,7 +8,7 @@ set -e
 echo "[$(date +'%Y-%m-%d %H:%M:%S')] Starting MesaPass API application..."
 
 # Get environment variables with defaults
-PORT=${PORT:-8000}
+PORT=${PORT:-8080}
 HOST=${HOST:-0.0.0.0}
 WORKERS=${WORKERS:-1}
 LOG_LEVEL=${LOG_LEVEL:-info}
